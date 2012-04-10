@@ -17,3 +17,9 @@
 
 ;; make the cursor blinking
 ;; (blink-cursor-mode t)
+
+;; enable subword-mode that lets you move by camelCase
+(global-subword-mode 1)
+
+;; point not keep screen position while scrolling
+(setq scroll-preserve-screen-position nil)
