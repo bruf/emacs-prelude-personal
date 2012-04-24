@@ -26,7 +26,7 @@
 
 (setq prelude-packages
       (append prelude-packages
-              '(smex switch-window)))
+              '(smex switch-window ace-jump-mode)))
 
 (unless (prelude-packages-installed-p)
   ;; check for new packages (package versions)
@@ -147,6 +147,8 @@
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+;(setq-default py-indent-offset 4)
+
 (setq indent-line-function 'insert-tab)
 (setq-default require-final-newline nil)
 
