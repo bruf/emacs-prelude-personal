@@ -41,6 +41,16 @@
 ;; set default directory to $HOME
 (setq default-directory "~/")
 
+;; platform dependend configurations
+(add-to-list 'load-path "~/.emacs.d/personal/platform")
+;; Are we on a mac?
+(setq is-mac (equal system-type 'darwin))
+(when is-mac (require 'mac))
+
+;; Are we on a windows?
+(setq is-win (equal system-type 'windows-nt))
+(when is-win (require 'win))
+
 ;; set cygwin bash as default shell
 (setq explicit-bash-args '("--login" "-i"))
 (defun cygwin-shell ()
