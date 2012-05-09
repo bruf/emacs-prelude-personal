@@ -1,4 +1,6 @@
-;; mac friendly font
-(set-face-attribute 'default nil :font "Mensch-9")
+;; windows friendly font
+;; Anonymous Pro-10
+;; Cousine-9
+(set-face-attribute 'default nil :font "Cousine-9")
 
 (provide 'win)
