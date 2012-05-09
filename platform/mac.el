@@ -4,7 +4,8 @@
 (setq ns-function-modifier 'hyper)
 
 ;; mac friendly font
-(set-face-attribute 'default nil :font "Menlo-12")
+;; Menlo-12
+(set-face-attribute 'default nil :font "Cousine-12")
 
 ;; make sure path is correct when launched as application
 (setenv "PATH" (concat "/usr/local/share/python:/usr/local/bin:/usr/local/sbin:" (getenv "PATH")))
@@ -28,7 +29,8 @@
 (normal-erase-is-backspace-mode t)
 
 ;; PeepOpen
-;; See https://gist.github.com/1505658 if PeepOpen opens selected files in a new Emacs instance
+;; See https://gist.github.com/1505658
+;; if PeepOpen opens selected files in a new Emacs instance
 ;(require 'eproject-peepopen)
 
 (provide 'mac)
