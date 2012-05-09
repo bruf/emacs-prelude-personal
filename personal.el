@@ -19,9 +19,14 @@
 ;; (blink-cursor-mode t)
 
 ;; install custom packages
+
+(add-to-list 'package-archives
+             '("MyMelpa" . "~/repository/melpa/packages/") t)
+(package-initialize)
+
 (setq prelude-packages
       (append prelude-packages
-              '(smex)))
+              '(smex switch-window ace-jump-mode)))
 
 (unless (prelude-packages-installed-p)
   ;; check for new packages (package versions)
@@ -33,6 +38,61 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
+;; set default directory to $HOME
+(setq default-directory "~/")
+
+;; platform dependend configurations
+(add-to-list 'load-path "~/.emacs.d/personal/platform")
+;; Are we on a mac?
+(setq is-mac (equal system-type 'darwin))
+(when is-mac (require 'mac))
+
+;; Are we on a windows?
+(setq is-win (equal system-type 'windows-nt))
+(when is-win (require 'win))
+
+;; set cygwin bash as default shell
+(setq explicit-bash-args '("--login" "-i"))
+(defun cygwin-shell ()
+  "Run cygwin bash in shell mode."
+  (interactive)
+  (let ((explicit-shell-file-name "C:/cygwin/bin/bash"))
+    (call-interactively 'shell)))
+
+(add-hook 'comint-output-filter-functions
+'shell-strip-ctrl-m nil t)
+
+(add-hook 'comint-output-filter-functions
+'comint-watch-for-password-prompt nil t)
+
+(add-hook 'shell-mode-hook 'n-shell-mode-hook)
+(defun n-shell-mode-hook ()
+  "12Jan2002 - sailor, shell mode customizations."
+  (local-set-key '[up] 'comint-previous-input)
+  (local-set-key '[down] 'comint-next-input)
+  (local-set-key '[(shift tab)] 'comint-next-matching-input-from-input)
+  )
+
+(defun n-shell-simple-send (proc command)
+  "17Jan02 - sailor. Various commands pre-processing before sending to shell."
+  (cond
+   ;; Checking for clear command and execute it.
+   ((string-match "^[ \t]*clear[ \t]*$" command)
+    (comint-send-string proc "\n")
+    (erase-buffer)
+    )
+   ;; Checking for man command and execute it.
+   ((string-match "^[ \t]*man[ \t]*" command)
+    (comint-send-string proc "\n")
+    (setq command (replace-regexp-in-string "^[ \t]*man[ \t]*" "" command))
+    (setq command (replace-regexp-in-string "[ \t]+$" "" command))
+    ;;(message (format "command %s command" command))
+    (funcall 'man command)
+    )
+   ;; Send other commands to the default handler.
+   (t (comint-simple-send proc command))
+   )
+  )
 
 ;; enable subword-mode that lets you move by camelCase
 (global-subword-mode 1)
@@ -50,6 +110,7 @@
 
 ;; bs instead of buffer-menu
 (global-set-key (kbd "C-x C-b") 'bs-show)
+(global-set-key (kbd "C-x C-o") 'other-frame)
 
 ;; Backup
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -62,6 +123,7 @@
 ;; smex for executing command
 (require 'smex)
 (smex-initialize)
+(setq smex-save-file "~/.emacs.d/emacs-meta/.smex-items")
 (global-set-key (kbd "M-x") 'smex)
 
 ;; disable alarm bell and visual bell
@@ -88,16 +150,38 @@
 (setq inhibit-startup-message 't)
 (setq initial-scratch-message nil)
 
+(scroll-bar-mode -1)
+
 ;; indentation and tab stops
 (setq-default fill-column '80)
 (auto-fill-mode 't)
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+;(setq-default py-indent-offset 4)
+
 (setq indent-line-function 'insert-tab)
+(setq-default require-final-newline nil)
 
 ;; nxml
 (setq auto-mode-alist
         (cons '("\\.\\(xml\\|xsd\\|xsl\\|rng\\|xhtml\\)\\'" . nxml-mode)
          auto-mode-alist))
 (setq nxml-child-indent 4)
+
+;; delete trailing whitespaces before saving
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; change window switching with switch-mode
+(require 'switch-window)
+
+;; change flyspell dictionary with f8
+(defun fd-switch-dictionary()
+    (interactive)
+    (let* ((dic ispell-current-dictionary)
+    (change (if (string= dic "deutsch8") "english" "deutsch8")))
+      (ispell-change-dictionary change)
+      (message "Dictionary switched from %s to %s" dic change)
+      ))
+
+(global-set-key (kbd "<f8>") 'fd-switch-dictionary)

@@ -1,0 +1,3 @@
+#name : (current time)
+# --
+`(insert (format-time-string "%Y-%m-%d %H:%M"))`
