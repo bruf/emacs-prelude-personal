@@ -99,6 +99,7 @@
 
 ;; point not keep screen position while scrolling
 (setq scroll-preserve-screen-position nil)
+(scroll-bar-mode -1)
 
 ;; use utf-8 environment as default
 (set-language-environment 'UTF-8)
