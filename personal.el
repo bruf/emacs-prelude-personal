@@ -184,3 +184,10 @@
       ))
 
 (global-set-key (kbd "<f8>") 'fd-switch-dictionary)
+
+;; ace-jump for easy navigation in the current buffer
+(require 'ace-jump-mode)
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+;; start emacs server to open other files with this instance of emacs
+(server-start)
