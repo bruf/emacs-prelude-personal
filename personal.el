@@ -26,7 +26,7 @@
 
 (setq prelude-packages
       (append prelude-packages
-              '(smex switch-window ace-jump-mode)))
+              '(csv-mode smex switch-window ace-jump-mode)))
 
 (unless (prelude-packages-installed-p)
   ;; check for new packages (package versions)
@@ -192,3 +192,8 @@
 
 ;; start emacs server to open other files with this instance of emacs
 (server-start)
+
+;; load yas snippets
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/personal/snippets")
