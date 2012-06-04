@@ -26,7 +26,7 @@
 
 (setq prelude-packages
       (append prelude-packages
-              '(csv-mode smex switch-window ace-jump-mode)))
+              '(csv-mode smex switch-window ace-jump-mode yaml-mode zencoding-mode)))
 
 (unless (prelude-packages-installed-p)
   ;; check for new packages (package versions)
@@ -40,6 +40,9 @@
 
 ;; set default directory to $HOME
 (setq default-directory "~/")
+
+;; use solarized dark theme
+;(load-theme 'solarized-dark t)
 
 ;; platform dependend configurations
 (add-to-list 'load-path "~/.emacs.d/personal/platform")
@@ -197,3 +200,7 @@
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/personal/snippets")
+
+;; zencoding
+(require 'zencoding-mode)
+(add-hook 'sgml-mode-hook 'zencoding-mode)
